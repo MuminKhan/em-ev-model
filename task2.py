@@ -22,12 +22,12 @@ In addition to the model documentation, create a table that describes 5 unique a
 •	Vehicle and fleet cost.
 """
 
-from models.autonomous_system import AutonomousSystemChoice
-from models.battery_charger import BatteryChargerChoice
-from models.battery_pack import BatteryPackChoice
-from models.chasis import ChasisChoice
-from models.ev import Ev
-from models.motor_and_inverter import MotorAndInverterChoice
+from .models.autonomous_system import AutonomousSystemChoice
+from .models.battery_charger import BatteryChargerChoice
+from .models.battery_pack import BatteryPackChoice
+from .models.chasis import ChasisChoice
+from .models.ev import Ev
+from .models.motor_and_inverter import MotorAndInverterChoice
 
 from itertools import product
 

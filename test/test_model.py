@@ -1,6 +1,10 @@
 import pytest
+import sys
+
+print(sys.path)
 
 from models.multi_attribute_utility import MultiAttributeUtility
+
 
 
 @pytest.fixture
@@ -29,6 +33,7 @@ def test_passenger_volume_utility(test_case):
     assert test_case.utility_passenger_volume(1000) == 0.4
     assert test_case.utility_passenger_volume(1500) == 0.8
     assert test_case.utility_passenger_volume(2000) == 1.0
+    assert test_case.utility_passenger_volume(8888) == 1.0
 
     with pytest.raises(ValueError):
         test_case.utility_passenger_volume(-1)
@@ -52,6 +57,7 @@ def test_peak_passenger_throughput_utility(test_case):
     assert test_case.utility_peak_passenger_throughput(100) == 0.5
     assert test_case.utility_peak_passenger_throughput(150) == 0.9
     assert test_case.utility_peak_passenger_throughput(200) == 1.0
+    assert test_case.utility_peak_passenger_throughput(999) == 1.0
 
     with pytest.raises(ValueError):
         test_case.utility_peak_passenger_throughput(-1)
@@ -64,6 +70,7 @@ def test_availibility_dml3_utility(test_case):
     assert test_case.utility_availibility_dml3(0.6) == 0.6
     assert test_case.utility_availibility_dml3(0.8) == 0.8
     assert test_case.utility_availibility_dml3(1.0) == 1.0
+    assert test_case.utility_availibility_dml3(10.0) == 1.0
 
     with pytest.raises(ValueError):
         test_case.utility_availibility_dml3(-1)
