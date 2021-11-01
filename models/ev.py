@@ -79,7 +79,8 @@ class Ev():
         """
         Power Consumption [Wh/km] = Nominal Power Consumption Chassis [Wh/km] + 0.1*(Total Weight [kg] - Chassis Weight [kg] ) + Added Power Consumption Autonomous System [Wh/km]
         """
-        power_consumption_Wh_per_kM = self.chasis.nominal_power_consumption_Wh_per_km + (0.1 * (self.total_vehicle_weight_kg - self.chasis.weight_kg)) + self.autonomous_system.added_power_consumption_Wh_per_kW
+        power_consumption_Wh_per_kM = self.chasis.nominal_power_consumption_Wh_per_km + \
+            (0.1 * (self.total_vehicle_weight_kg - self.chasis.weight_kg)) + self.autonomous_system.added_power_consumption_Wh_per_kW
         return power_consumption_Wh_per_kM
 
     def _calculate_range_km(self) -> float:
@@ -116,6 +117,3 @@ class Ev():
         Availability [dml] = Up-time / (Up-time + Down-time) 
         """
         return self.uptime_hours / (self.uptime_hours + self.downtime_hours)
-
-    def calculate_total_fleet_cost_usd(self, number_of_vehicles: int) -> float:
-        return self.total_vehicle_cost_1k_usd * number_of_vehicles

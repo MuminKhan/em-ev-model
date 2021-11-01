@@ -27,8 +27,8 @@ class MultiAttributeUtility:
         self.peak_passenger_throuput = peak_passenger_throuput
         self.average_wait_time_minutes = average_wait_time_minutes
         self.availability = availability
+        self.mau = self._calculate_weighted_sum_mau()
 
-        self.mau = self.calculate_mau()
 
     def utility_passenger_volume(self, passenger_volume=None) -> float:
         if passenger_volume is None:
@@ -100,13 +100,15 @@ class MultiAttributeUtility:
         utility = util_map.get(availability, 1.0)
         return utility
 
-    def calculate_mau(self):
+    def _calculate_weighted_sum_mau(self):
         pvol = self.WEIGHT_PASSENGER_VOLUME * self.utility_passenger_volume()
         pthrough = self.WEIGHT_PEAK_PASSENGER_THROUGHPUT * self.utility_peak_passenger_throughput()
         wait = self.WEIGHT_AVERAGE_WAIT_TIME * self.utility_avg_wait_time()
         avail = self.WEIGHT_AVAILABILITY * self.utility_availibility_dml3()
 
-        return round(sum((pvol, pthrough, wait, avail)), 3)
+        mau = round(sum((pvol, pthrough, wait, avail)), 3)
+        print(f'{pvol} + {pthrough} + {wait} + {avail} = {mau}')
+        return mau
 
     def __str__(self) -> str:
         s = '*' * 20 + '\n'

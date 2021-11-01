@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class TripDemand(Enum):
     t0000 = 15
     t0200 = 5

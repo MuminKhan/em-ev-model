@@ -24,7 +24,7 @@ class Chasis:
         attribute_dict = self._get_attribute_mapping(chasis_choice)
 
         self.choice = chasis_choice
-        self.pax = attribute_dict.get(self._key_pax, -1)
+        self.passenger_capacity = attribute_dict.get(self._key_pax, -1)
         self.weight_kg = attribute_dict.get(self._key_weight_kg, -1)
         self.cost_1k_usd = attribute_dict.get(self._key_cost_1k_usd, -1)
         self.nominal_power_consumption_Wh_per_km = attribute_dict.get(self._key_nominal_power_consumption_Wh_per_km, -1)
