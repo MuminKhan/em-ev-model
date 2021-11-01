@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+
 class MultiAttributeUtility:
     """
     MultiAttributeUtility Class
@@ -55,8 +56,7 @@ class MultiAttributeUtility:
             500: 0.2,
             1000: 0.4,
             1500: 0.8,
-            2000: 1.0,
-            9999: 1.0
+            2000: 1.0
         }
 
         p1 = p2 = (0.0, 0.0)
@@ -66,6 +66,8 @@ class MultiAttributeUtility:
             if k >= passenger_volume:
                 p2 = (k, v)
                 break
+        else:
+            p2 = p1
 
         utility = MultiAttributeUtility.interpolate(passenger_volume, p1, p2)
         return utility
@@ -82,8 +84,7 @@ class MultiAttributeUtility:
             10: 0.75,
             15: 0.40,
             20: 0.20,
-            30: 0.0,
-            9999: 0.0
+            30: 0.0
         }
 
         p1 = p2 = (0.0, 1.0)
@@ -93,6 +94,8 @@ class MultiAttributeUtility:
             if k >= average_wait_time_minutes:
                 p2 = (k, v)
                 break
+        else:
+            p2 = p1
 
         utility = MultiAttributeUtility.interpolate(average_wait_time_minutes, p1, p2)
         return utility
@@ -108,8 +111,7 @@ class MultiAttributeUtility:
             50: 0.2,
             100: 0.5,
             150: 0.9,
-            200: 1.0,
-            9999: 1.0
+            200: 1.0
         }
 
         p1 = p2 = (0.0, 0.0)
@@ -119,6 +121,8 @@ class MultiAttributeUtility:
             if k >= peak_passenger_throuput:
                 p2 = (k, v)
                 break
+        else:
+            p2 = p1
 
         utility = MultiAttributeUtility.interpolate(peak_passenger_throuput, p1, p2)
         return utility
@@ -135,8 +139,7 @@ class MultiAttributeUtility:
             0.4: 0.4,
             0.6: 0.6,
             0.8: 0.8,
-            1.0: 1.0,
-            999: 1.0
+            1.0: 1.0
         }
 
         p1 = p2 = (0.0, 0.0)
@@ -146,6 +149,8 @@ class MultiAttributeUtility:
             if k >= availability:
                 p2 = (k, v)
                 break
+        else:
+            p2 = p1
 
         utility = MultiAttributeUtility.interpolate(availability, p1, p2)
         return utility
