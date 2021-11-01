@@ -33,16 +33,25 @@ class MultiAttributeUtility:
         self.mau = self._calculate_weighted_sum_mau()
 
     @staticmethod
-    def interpolate(x: float, point_1: tuple[float, float], point_2: tuple[float, float]) -> float:
+    def interpolate(x: float, util_map: dict) -> float:
+        p1 = p2 = list(util_map.items())[0]
+        for k, v in util_map.items():
+            if k <= x:
+                p1 = (k, v)
+            if k >= x:
+                p2 = (k, v)
+                break
+        else:
+            p2 = p1
 
-        if point_1 == point_2:
-            return point_1[1]
+        if p1 == p2:
+            return p1[1]
 
-        x1, y1 = point_1
-        x2, y2 = point_2
+        x1, y1 = p1
+        x2, y2 = p2
         val = round(y1 + (x - x1) * (y2 - y1)/(x2 - x1), 4)
 
-        #print(f'INTERPOLATING {x} between {point_1} and {point_2} => ({x}. {val})')
+        #print(f'INTERPOLATING {x} between {p1} and {p2} => ({x}. {val})')
         return val
 
     def utility_passenger_volume(self, passenger_volume=None) -> float:
@@ -59,17 +68,7 @@ class MultiAttributeUtility:
             2000: 1.0
         }
 
-        p1 = p2 = (0.0, 0.0)
-        for k, v in util_map.items():
-            if k <= passenger_volume:
-                p1 = (k, v)
-            if k >= passenger_volume:
-                p2 = (k, v)
-                break
-        else:
-            p2 = p1
-
-        utility = MultiAttributeUtility.interpolate(passenger_volume, p1, p2)
+        utility = MultiAttributeUtility.interpolate(passenger_volume, util_map)
         return utility
 
     def utility_avg_wait_time(self, average_wait_time_minutes=None) -> float:
@@ -87,17 +86,7 @@ class MultiAttributeUtility:
             30: 0.0
         }
 
-        p1 = p2 = (0.0, 1.0)
-        for k, v in util_map.items():
-            if k <= average_wait_time_minutes:
-                p1 = (k, v)
-            if k >= average_wait_time_minutes:
-                p2 = (k, v)
-                break
-        else:
-            p2 = p1
-
-        utility = MultiAttributeUtility.interpolate(average_wait_time_minutes, p1, p2)
+        utility = MultiAttributeUtility.interpolate(average_wait_time_minutes, util_map)
         return utility
 
     def utility_peak_passenger_throughput(self, peak_passenger_throuput=None) -> float:
@@ -114,17 +103,7 @@ class MultiAttributeUtility:
             200: 1.0
         }
 
-        p1 = p2 = (0.0, 0.0)
-        for k, v in util_map.items():
-            if k <= peak_passenger_throuput:
-                p1 = (k, v)
-            if k >= peak_passenger_throuput:
-                p2 = (k, v)
-                break
-        else:
-            p2 = p1
-
-        utility = MultiAttributeUtility.interpolate(peak_passenger_throuput, p1, p2)
+        utility = MultiAttributeUtility.interpolate(peak_passenger_throuput, util_map)
         return utility
 
     def utility_availibility_dml3(self, availability=None) -> float:
@@ -142,17 +121,7 @@ class MultiAttributeUtility:
             1.0: 1.0
         }
 
-        p1 = p2 = (0.0, 0.0)
-        for k, v in util_map.items():
-            if k <= availability:
-                p1 = (k, v)
-            if k >= availability:
-                p2 = (k, v)
-                break
-        else:
-            p2 = p1
-
-        utility = MultiAttributeUtility.interpolate(availability, p1, p2)
+        utility = MultiAttributeUtility.interpolate(availability, util_map)
         return utility
 
     def _calculate_weighted_sum_mau(self):
@@ -162,7 +131,7 @@ class MultiAttributeUtility:
         avail = self.WEIGHT_AVAILABILITY * self.utility_availibility_dml3()
 
         mau = round(sum((pvol, pthrough, wait, avail)), 4)
-        print(f'{pvol} + {pthrough} + {wait} + {avail} = {mau}')
+        #print(f'{pvol} + {pthrough} + {wait} + {avail} = {mau}')
         return mau
 
     def __str__(self) -> str:
