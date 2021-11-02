@@ -100,9 +100,9 @@ class Fleet:
 
     def to_dict(self) -> dict:
         d = {k:v for k,v in self.__dict__.items() if k[0] != '_' and k not in ('route', 'vehicle')}
-        ev = {k:v for k,v in self.vehicle.__dict__().items() if k[0] != '_'}
+        ev = {k:v for k,v in self.vehicle.__dict__.items() if k[0] != '_'}
         d.update(ev)
-        route = {k:v for k,v in self.route.__dict__().items() if k[0] != '_'}
+        route = {k:v for k,v in self.route.__dict__.items() if k[0] != '_'}
         d.update(route)
         return
         
