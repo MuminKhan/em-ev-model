@@ -9,19 +9,6 @@ class Ev():
 
     def __init__(self, autonomous_system_choice: AutonomousSystemChoice = None, battery_charger_choice: BatteryChargerChoice = None, battery_pack_choice: BatteryPackChoice = None,  chasis_choice: ChasisChoice = None, motor_and_inverter_choice: MotorAndInverterChoice = None) -> None:
 
-        # CONSTANTS
-        # Average passenger weight [kg] = 100
-        self.PASSENGER_WEIGHT_AVERAGE_KG = 100
-
-        # Expected average load factor/trip = 0.75
-        self.LOAD_FACTOR_EXPECTED_AVG = 0.75
-
-        # Benchmark availability of competing systems: 0.75
-        self.BENCHMARK_AVAIL_COMPETING_SYSTEMS = 0.75
-
-        # Dwell time [s] = 60 (time for passengers get out and get in)
-        self.DWELL_TIME_SECONDS = 60
-
         choices = (autonomous_system_choice, battery_pack_choice, battery_charger_choice, chasis_choice, motor_and_inverter_choice)
         if any(choices) is None:
             raise ValueError("Must supply choices for each: autonomous_system_choice, battery_pack_choice, battery_charger_choice, chasis_choice, motor_and_inverter_choice")

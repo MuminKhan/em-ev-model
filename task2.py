@@ -27,10 +27,12 @@ from models.battery_charger import BatteryChargerChoice
 from models.battery_pack import BatteryPackChoice
 from models.chasis import ChasisChoice
 from models.ev import Ev
+from models.fleet import Fleet
 from models.motor_and_inverter import MotorAndInverterChoice
 
 from itertools import product
 
+"""
 csv_header = ['id', 'PASSENGER_WEIGHT_AVERAGE_KG', 'LOAD_FACTOR_EXPECTED_AVG', 'BENCHMARK_AVAIL_COMPETING_SYSTEMS', 'DWELL_TIME_SECONDS', 'autonomous_system', 'battery_pack', 'battery_charger', 'chasis', 'motor_and_inverter',
               'total_vehicle_cost_1k_usd', 'total_vehicle_weight_kg', 'battery_charge_time_hours', 'power_consumption_Wh_per_km', 'range_km', 'average_speed_km_per_hour', 'uptime_hours', 'downtime_hours', 'availability']
 bad_row = ', '.join(['-1'] * (len(csv_header) - 1))
@@ -59,3 +61,16 @@ for autonomy, bcharger, bpack, chasis, motor in product(list(AutonomousSystemCho
 
     if cycles >= 10:
         exit()
+"""
+
+
+my_car_number_1 = Ev(
+    autonomous_system_choice=AutonomousSystemChoice.A3,
+    battery_charger_choice=BatteryChargerChoice.G1,
+    battery_pack_choice=BatteryPackChoice.P3,
+    motor_and_inverter_choice=MotorAndInverterChoice.M3,
+    chasis_choice=ChasisChoice.C7
+)
+
+
+print(my_car_number_1)
