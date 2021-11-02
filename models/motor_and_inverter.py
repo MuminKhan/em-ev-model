@@ -44,7 +44,7 @@ class MotorAndInverter:
             MotorAndInverterChoice.M4: {
                 self._key_weight_kg: 100,
                 self._key_power_kW: 450,
-                self._key_cost_1k_usd: 3600
+                self._key_cost_1k_usd: 3.6
             }
         }
 
