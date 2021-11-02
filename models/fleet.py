@@ -75,7 +75,7 @@ class Fleet:
         # t = d/r + waiting
         distance = self.route.length_km
         rate = self.vehicle.average_speed_km_per_hour
-        time = distance/rate + (self._DWELL_TIME_SECONDS * self.route.stops)
+        time = distance/rate + (round(self._DWELL_TIME_SECONDS/60, 2) * self.route.stops)
         return round(time, 3)
 
     def calculate_average_waiting_time_minutes(self) -> float:
