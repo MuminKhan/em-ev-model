@@ -104,7 +104,7 @@ class Fleet:
         d.update(ev)
         route = {k:v for k,v in self.route.__dict__.items() if k[0] != '_'}
         d.update(route)
-        return
+        return d
         
 
     def __str__(self) -> str:
