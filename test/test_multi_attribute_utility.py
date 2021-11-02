@@ -11,7 +11,7 @@ from models.multi_attribute_utility import MultiAttributeUtility
 def test_case():
     t = MultiAttributeUtility(
         name="CASE TEST",
-        passenger_volume=0,
+        daily_passenger_volume=0,
         peak_passenger_throuput=0,
         average_wait_time_minutes=0,
         availability=0

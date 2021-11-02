@@ -63,8 +63,7 @@ for autonomy, bcharger, bpack, chasis, motor in product(list(AutonomousSystemCho
         exit()
 """
 
-
-my_car_number_1 = Ev(
+car = Ev(
     autonomous_system_choice=AutonomousSystemChoice.A3,
     battery_charger_choice=BatteryChargerChoice.G1,
     battery_pack_choice=BatteryPackChoice.P3,
@@ -72,5 +71,6 @@ my_car_number_1 = Ev(
     chasis_choice=ChasisChoice.C7
 )
 
+fleet = Fleet(car, 50)
 
-print(my_car_number_1)
+print(fleet)

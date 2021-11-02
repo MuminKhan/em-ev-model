@@ -19,7 +19,7 @@ Availability	                            0.7	    0.6	    0.8
 
 case_a = MultiAttributeUtility(
     name = "CASE A",
-    passenger_volume = 1000,
+    daily_passenger_volume = 1000,
     peak_passenger_throuput = 75,
     average_wait_time_minutes = 8,
     availability = 0.7
@@ -27,7 +27,7 @@ case_a = MultiAttributeUtility(
 
 case_b = MultiAttributeUtility(
     name = "CASE B",
-    passenger_volume = 2000,
+    daily_passenger_volume = 2000,
     peak_passenger_throuput = 100,
     average_wait_time_minutes = 12,
     availability = 0.6
@@ -35,7 +35,7 @@ case_b = MultiAttributeUtility(
 
 case_c = MultiAttributeUtility(
     name = "CASE C",
-    passenger_volume = 750,
+    daily_passenger_volume = 750,
     peak_passenger_throuput = 75,
     average_wait_time_minutes = 6,
     availability = 0.8

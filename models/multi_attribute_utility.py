@@ -6,15 +6,15 @@ class MultiAttributeUtility:
     MultiAttributeUtility Class
     """
 
-    def __init__(self, name, passenger_volume, peak_passenger_throuput, average_wait_time_minutes, availability) -> None:
+    def __init__(self, daily_passenger_volume, peak_passenger_throuput, average_wait_time_minutes, availability, name='', explain=False) -> None:
 
         self.WEIGHT_PASSENGER_VOLUME = 0.15
         self.WEIGHT_PEAK_PASSENGER_THROUGHPUT = 0.25
         self.WEIGHT_AVERAGE_WAIT_TIME = 0.35
         self.WEIGHT_AVAILABILITY = 0.25
 
-        if passenger_volume < 0:
-            raise ValueError(f"passenger_volume must be greater than 0, not {passenger_volume}")
+        if daily_passenger_volume < 0:
+            raise ValueError(f"passenger_volume must be greater than 0, not {daily_passenger_volume}")
 
         if peak_passenger_throuput < 0:
             raise ValueError(f"peak_passenger_throuput must be greater than 0, not {peak_passenger_throuput}")
@@ -26,14 +26,14 @@ class MultiAttributeUtility:
             raise ValueError(f"availability must be greater than 0, not {availability}")
 
         self.name = name
-        self.passenger_volume = passenger_volume
+        self._explain = explain
+        self.daily_passenger_volume = daily_passenger_volume
         self.peak_passenger_throuput = peak_passenger_throuput
         self.average_wait_time_minutes = average_wait_time_minutes
         self.availability = availability
-        self.mau = self._calculate_weighted_sum_mau()
+        self.score = self._calculate_weighted_sum_mau()
 
-    @staticmethod
-    def interpolate(x: float, util_map: dict) -> float:
+    def interpolate(self, x: float, util_map: dict) -> float:
         p1 = p2 = list(util_map.items())[0]
         for k, v in util_map.items():
             if k <= x:
@@ -51,12 +51,14 @@ class MultiAttributeUtility:
         x2, y2 = p2
         val = round(y1 + (x - x1) * (y2 - y1)/(x2 - x1), 4)
 
-        #print(f'INTERPOLATING {x} between {p1} and {p2} => ({x}. {val})')
+        if self._explain:
+            print(f'INTERPOLATING {x} between {p1} and {p2} => ({x}. {val})')
+
         return val
 
     def utility_passenger_volume(self, passenger_volume=None) -> float:
         if passenger_volume is None:
-            passenger_volume = self.passenger_volume
+            passenger_volume = self.daily_passenger_volume
         if passenger_volume < 0:
             raise ValueError("passenger_volume must be greater than 0.")
 
@@ -68,7 +70,11 @@ class MultiAttributeUtility:
             2000: 1.0
         }
 
-        utility = MultiAttributeUtility.interpolate(passenger_volume, util_map)
+        utility = self.interpolate(passenger_volume, util_map)
+
+        if self._explain:
+            print(f'passenger_volume value of {passenger_volume} is {utility} utility')
+
         return utility
 
     def utility_avg_wait_time(self, average_wait_time_minutes=None) -> float:
@@ -85,8 +91,10 @@ class MultiAttributeUtility:
             20: 0.20,
             30: 0.0
         }
-
-        utility = MultiAttributeUtility.interpolate(average_wait_time_minutes, util_map)
+        
+        utility = self.interpolate(average_wait_time_minutes, util_map)
+        if self._explain:
+            print(f'average_wait_time_minutes value of {average_wait_time_minutes} is {utility} utility')
         return utility
 
     def utility_peak_passenger_throughput(self, peak_passenger_throuput=None) -> float:
@@ -103,7 +111,9 @@ class MultiAttributeUtility:
             200: 1.0
         }
 
-        utility = MultiAttributeUtility.interpolate(peak_passenger_throuput, util_map)
+        utility = self.interpolate(peak_passenger_throuput, util_map)
+        if self._explain:
+            print(f'peak_passenger_throuput value of {peak_passenger_throuput} is {utility} utility')
         return utility
 
     def utility_availibility_dml3(self, availability=None) -> float:
@@ -121,7 +131,9 @@ class MultiAttributeUtility:
             1.0: 1.0
         }
 
-        utility = MultiAttributeUtility.interpolate(availability, util_map)
+        utility = self.interpolate(availability, util_map)
+        if self._explain:
+            print(f'availability value of {availability} is {availability} utility')
         return utility
 
     def _calculate_weighted_sum_mau(self):
@@ -131,16 +143,24 @@ class MultiAttributeUtility:
         avail = self.WEIGHT_AVAILABILITY * self.utility_availibility_dml3()
 
         mau = round(sum((pvol, pthrough, wait, avail)), 4)
-        #print(f'{pvol} + {pthrough} + {wait} + {avail} = {mau}')
+        mau = max(0.0, min(1.0, mau))
+
+        if self._explain:
+            print(f'{self.WEIGHT_PASSENGER_VOLUME} * {self.utility_passenger_volume()} = {pvol}')
+            print(f'{self.WEIGHT_PEAK_PASSENGER_THROUGHPUT} * {self.utility_peak_passenger_throughput()} = {pthrough}')
+            print(f'{self.WEIGHT_AVERAGE_WAIT_TIME} * {self.WEIGHT_AVERAGE_WAIT_TIME} = {wait}')
+            print(f'{self.WEIGHT_AVAILABILITY} * {self.utility_availibility_dml3()} = {avail}')
+            print(f'{pvol} + {pthrough} + {wait} + {avail} = {mau}')
+
         return mau
 
     def __str__(self) -> str:
         s = '*' * 20 + '\n'
         s += f'{"CASE NAME:           ":<15}{self.name:>8}\n'
-        s += f'{"PASSENGER VOLUME:    ":<15}{self.passenger_volume:>8}\n'
+        s += f'{"PASSENGER VOLUME:    ":<15}{self.daily_passenger_volume:>8}\n'
         s += f'{"PASSENGER THROUGHPUT:":<15}{self.peak_passenger_throuput:>8}\n'
         s += f'{"AVERAGE WAIT TIME:   ":<15}{self.average_wait_time_minutes:>8}\n'
         s += f'{"AVAILABILITY:        ":<15}{self.availability:>8}\n'
-        s += f'{"MAU:                 ":<15}{self.mau:>8}\n'
+        s += f'{"MAU:                 ":<15}{self.score:>8}\n'
 
         return s
