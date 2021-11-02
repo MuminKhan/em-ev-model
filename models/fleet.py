@@ -85,7 +85,8 @@ class Fleet:
 
     def calculate_ideal_fleet_size(self) -> int:
         fleet = self.peak_passenger_throughput / ((60/self._DESIRED_WAIT_TIME) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
-        return math.ceil(fleet)
+        fleet = math.ceil(fleet)
+        return fleet if fleet >= 3 else 3
 
     def calculate_mau_score(self) -> float:
         mau = MultiAttributeUtility(
