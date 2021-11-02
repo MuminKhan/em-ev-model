@@ -84,8 +84,7 @@ class Fleet:
         return round(time, 3)
 
     def calculate_ideal_fleet_size(self) -> int:
-        # TODO: Just an idea
-        fleet = self.calculate_route_roundtrip_minutes() / self._DESIRED_WAIT_TIME
+        fleet = self.peak_passenger_throughput / ((60/self._DESIRED_WAIT_TIME) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
         return math.ceil(fleet)
 
     def calculate_mau_score(self) -> float:

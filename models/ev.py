@@ -7,7 +7,7 @@ from models.motor_and_inverter import MotorAndInverter, MotorAndInverterChoice
 
 class Ev():
 
-    def __init__(self, autonomous_system_choice: AutonomousSystemChoice = None, battery_charger_choice: BatteryChargerChoice = None, battery_pack_choice: BatteryPackChoice = None,  chasis_choice: ChasisChoice = None, motor_and_inverter_choice: MotorAndInverterChoice = None) -> None:
+    def __init__(self, autonomous_system_choice: AutonomousSystemChoice = None, battery_charger_choice: BatteryChargerChoice = None, battery_pack_choice: BatteryPackChoice = None,  chasis_choice: ChasisChoice = None, motor_and_inverter_choice: MotorAndInverterChoice = None, violate_constraints=False) -> None:
 
         choices = (autonomous_system_choice, battery_pack_choice, battery_charger_choice, chasis_choice, motor_and_inverter_choice)
         if any(choices) is None:
@@ -20,8 +20,9 @@ class Ev():
         self.chasis = Chasis(chasis_choice)
         self.motor_and_inverter = MotorAndInverter(motor_and_inverter_choice)
 
-        if self.battery_pack.weight_kg > self.chasis.weight_kg/3:
-            raise ValueError("The battery pack weight shall be no greater than ⅓ of the chassis weight (this is a proxy for limited space availability).")
+        if not violate_constraints:
+            if self.battery_pack.weight_kg > self.chasis.weight_kg/3:
+                raise ValueError("The battery pack weight shall be no greater than ⅓ of the chassis weight (this is a proxy for limited space availability).")
 
         # Derived Attributes
         self.total_vehicle_cost_1k_usd = self._calculate_total_vehicle_cost_1k_usd()
