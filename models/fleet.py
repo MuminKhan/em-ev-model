@@ -36,15 +36,14 @@ class Fleet:
         self.route = route
         self.vehicle = ev
 
-        self.minimum_throughput = 5
         self.off_peak_throughput = 50
         self.peak_passenger_throughput = 150
+        self.operated_speed_km_hour = 32
 
-        self.frequency_minimum = self.calculate_frequency_per_hour(self.minimum_throughput)
         self.frequency_off_peak = self.calculate_frequency_per_hour(self.off_peak_throughput)
         self.frequency_peak = self.calculate_frequency_per_hour(self.peak_passenger_throughput)
 
-        self.maximum_passenger_volume = self.peak_passenger_throughput * 24
+        self.maximum_passenger_volume = self.calculate_maximum_passenger_volume()
         self.route_completion_time_per_vehicle = self.calculate_route_roundtrip_minutes()
         self.average_wait_time = self.calculate_average_waiting_time_minutes()
 
@@ -56,6 +55,11 @@ class Fleet:
         # self.operated_speed = None  # TODO: Clarify? Is this from the EV?
 
         self.score = self.calculate_mau_score()
+
+    def calculate_maximum_passenger_volume(self):
+        peak_hours = 4
+        off_peak_hours = 24-peak_hours
+        return (self.peak_passenger_throughput * peak_hours) + (self.off_peak_throughput * off_peak_hours)
 
     def calculate_frequency_per_hour(self, throughput: int, cars_per_train=1) -> float:
         # OS4 Appendix B. Thanks Wikipedia
@@ -74,7 +78,7 @@ class Fleet:
     def calculate_route_roundtrip_minutes(self) -> float:
         # t = d/r + waiting
         distance = self.route.length_km
-        rate = self.vehicle.average_speed_km_per_hour
+        rate = min(self.vehicle.average_speed_km_per_hour, self.operated_speed_km_hour)
         time = distance/rate + (round(self._DWELL_TIME_SECONDS/60, 2) * self.route.stops)
         return round(time, 3)
 
