@@ -105,8 +105,15 @@ class Fleet:
     def to_dict(self) -> dict:
         d = {k:v for k,v in self.__dict__.items() if k[0] != '_' and k not in ('route', 'vehicle')}
         ev = {k:v for k,v in self.vehicle.__dict__.items() if k[0] != '_'}
-        d.update(ev)
+        ev['autonomous_system'] = self.vehicle.autonomous_system.choice.name
+        ev['battery_charger'] = self.vehicle.battery_charger.choice.name
+        ev['battery_pack'] = self.vehicle.battery_pack.choice.name
+        ev['chasis'] = self.vehicle.chasis.choice.name
+        ev['motor_and_inverter'] = self.vehicle.motor_and_inverter.choice.name
+        
         route = {k:v for k,v in self.route.__dict__.items() if k[0] != '_'}
+
+        d.update(ev)
         d.update(route)
         return d
         
