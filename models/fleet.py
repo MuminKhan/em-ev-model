@@ -57,17 +57,20 @@ class Fleet:
         self.score = self.calculate_mau_score()
 
     def calculate_maximum_passenger_volume(self):
+        # sum of passengers in peak and non-peak hours
         peak_hours = 4
         off_peak_hours = 24-peak_hours
         return (self.peak_passenger_throughput * peak_hours) + (self.off_peak_throughput * off_peak_hours)
 
     def calculate_frequency_per_hour(self, throughput: int, cars_per_train=1) -> float:
         # OS4 Appendix B. Thanks Wikipedia
+        # will give you the number of vehicles required to service a route given a throughput target
         f = throughput / (self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity * cars_per_train)
         return round(f, 4)
 
     def calculate_throughput(self, frequency: float, cars_per_train=1) -> float:
-        # Derived from calculate_frequency_per_hour
+        # Derived from calculate_frequency_per_hour 
+        # given a frequency, get throughput
         t = frequency * (self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity * cars_per_train)
         return round(t, 4)
 
@@ -84,11 +87,12 @@ class Fleet:
 
     def calculate_average_waiting_time_minutes(self) -> float:
         # uses peak load...
-        time = self.calculate_route_roundtrip_minutes() / self.frequency_peak
+        time = 60 * self.calculate_route_roundtrip_minutes() / self.frequency_peak
         return round(time, 3)
 
     def calculate_ideal_fleet_size(self) -> int:
-        fleet = self.peak_passenger_throughput / ((60/max(self._DESIRED_WAIT_TIME, self.average_wait_time)) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
+        # gives you b
+        fleet = self.peak_passenger_throughput / ((60/min(self._DESIRED_WAIT_TIME, self.average_wait_time)) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
         fleet = math.ceil(fleet)
         return fleet if fleet >= 3 else 3
 
