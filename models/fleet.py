@@ -48,7 +48,7 @@ class Fleet:
 
         self.fleet_size = fleet_size if fleet_size > 0 else self.calculate_ideal_fleet_size()
         self.fleet_cost_1M_usd = self.calculate_total_fleet_cost_usd()
-        
+
         self.average_wait_time_minutes = self.calculate_average_waiting_time_minutes()
 
         # I DON'T KNOWWWWWWWWWWWWW
@@ -94,7 +94,7 @@ class Fleet:
 
     def calculate_ideal_fleet_size(self) -> int:
         # gives you b
-        fleet = self.peak_passenger_throughput / (60/self._DESIRED_WAIT_TIME) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
+        fleet = self.peak_passenger_throughput / ((60/self._DESIRED_WAIT_TIME) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
         fleet = math.ceil(fleet)
         return fleet if fleet >= 3 else 3
 
