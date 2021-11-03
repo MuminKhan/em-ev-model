@@ -44,11 +44,12 @@ class Fleet:
         self.frequency_peak = self.calculate_frequency_per_hour(self.peak_passenger_throughput)
 
         self.maximum_passenger_volume = self.calculate_maximum_passenger_volume()
-        self.route_completion_time_per_vehicle = self.calculate_route_roundtrip_minutes()
-        self.average_wait_time = self.calculate_average_waiting_time_minutes()
+        self.route_completion_time_per_vehicle_minutes = self.calculate_route_roundtrip_minutes()
 
         self.fleet_size = fleet_size if fleet_size > 0 else self.calculate_ideal_fleet_size()
-        self.fleet_cost = self.calculate_total_fleet_cost_usd()
+        self.fleet_cost_1M_usd = self.calculate_total_fleet_cost_usd()
+        
+        self.average_wait_time_minutes = self.calculate_average_waiting_time_minutes()
 
         # I DON'T KNOWWWWWWWWWWWWW
         # self.availability = None  # TODO: Clarify? Is this from the EV?
@@ -75,8 +76,9 @@ class Fleet:
         return round(t, 4)
 
     def calculate_total_fleet_cost_usd(self) -> float:
-        # bruh
-        return round(self.vehicle.total_vehicle_cost_1k_usd * self.fleet_size, 2)
+        cost_in_thousands = self.vehicle.total_vehicle_cost_1k_usd * self.fleet_size
+        cost_in_millions = cost_in_thousands / 1000
+        return round(cost_in_millions, 3)
 
     def calculate_route_roundtrip_minutes(self) -> float:
         # t = d/r + waiting
@@ -87,12 +89,12 @@ class Fleet:
 
     def calculate_average_waiting_time_minutes(self) -> float:
         # uses peak load...
-        time = 60 * self.calculate_route_roundtrip_minutes() / self.frequency_peak
+        time = self.calculate_route_roundtrip_minutes() / self.fleet_size
         return round(time, 3)
 
     def calculate_ideal_fleet_size(self) -> int:
         # gives you b
-        fleet = self.peak_passenger_throughput / ((60/min(self._DESIRED_WAIT_TIME, self.average_wait_time)) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
+        fleet = self.peak_passenger_throughput / (60/self._DESIRED_WAIT_TIME) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
         fleet = math.ceil(fleet)
         return fleet if fleet >= 3 else 3
 
@@ -100,7 +102,7 @@ class Fleet:
         mau = MultiAttributeUtility(
             daily_passenger_volume=self.maximum_passenger_volume,
             peak_passenger_throuput=self.peak_passenger_throughput,
-            average_wait_time_minutes=self.average_wait_time,
+            average_wait_time_minutes=self.average_wait_time_minutes,
             availability=self.vehicle.availability
         )
         score = mau.score
