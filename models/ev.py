@@ -37,7 +37,8 @@ class Ev():
         self.battery_charge_time_hours = self._calculate_battery_charge_time_hours()
         self.power_consumption_Wh_per_km = self._calculate_power_consumption_Wh_per_km()
         self.range_km = self._calculate_range_km()
-        self.average_speed_km_per_hour = self._calculate_average_speed_km_per_hour()
+        self.maximum_sustained_speed_km_per_hour = self._calculate_average_speed_km_per_hour()
+        self.operated_speed = max(32, self.maximum_sustained_speed_km_per_hour)
         self.uptime_hours = self._calculate_uptime_hours()
         self.downtime_hours = self._calculate_downtime_hours()
         self.availability = self._calculate_availability()
@@ -98,7 +99,7 @@ class Ev():
         """
         #Up-time [h] = Range [km] / Average Speed [km/h]
         """
-        uptime_hours = self.range_km / self.average_speed_km_per_hour
+        uptime_hours = self.range_km / self.operated_speed
         return round(uptime_hours, 4)
 
     def _calculate_downtime_hours(self) -> float:
@@ -165,7 +166,8 @@ class Ev():
         s += f'\t{"Battery Charge Time:":<28}{self.battery_charge_time_hours} hours\n'
         s += f'\t{"Power Consumption:":<28}{self.power_consumption_Wh_per_km} Wh/km\n'
         s += f'\t{"Range:":<28}{self.range_km} km\n'
-        s += f'\t{"Average Speed:":<28}{self.average_speed_km_per_hour} km/hour\n'
+        s += f'\t{"Max Speed:":<28}{self.maximum_sustained_speed_km_per_hour} km/hour\n'
+        s += f'\t{"Operated Speed:":<28}{self.operated_speed} km/hour\n'
         s += f'\t{"Uptime:":<28}{self.uptime_hours} hours\n'
         s += f'\t{"Downtime:":<28}{self.downtime_hours} hours\n'
         s += f'\t{"Availability:":<28}{self.availability}\n'
