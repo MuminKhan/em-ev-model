@@ -29,7 +29,7 @@ class Fleet:
         # Dwell time [s] = 60 (time for passengers get out and get in)
         self._DWELL_TIME_SECONDS = 60
 
-        self._FLEET_BUFFER_VEHICLES = 1
+        self._FLEET_BUFFER_VEHICLES = 0
 
         # Derived Parameters
         self.route = route
