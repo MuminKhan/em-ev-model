@@ -57,14 +57,13 @@ class Fleet:
 
         self.score = self.calculate_mau_score()
 
-
     def calculate_route_roundtrip_minutes(self) -> float:
         # t = d/r + waiting
         distance = self.route.length_km
         rate = min(self.vehicle.average_speed_km_per_hour, self.operated_speed_km_hour)
         time = (60*distance/rate) + (round(self._DWELL_TIME_SECONDS/60, 2) * self.route.stops)
         return round(time, 3)
-    
+
     def calculate_ideal_fleet_size(self) -> int:
         # gives you b
         fleet = self.peak_passenger_throughput / ((60/self._DESIRED_WAIT_TIME) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
@@ -84,7 +83,7 @@ class Fleet:
         return round(f, 4)
 
     def calculate_throughput(self, frequency: float, cars_per_train=1) -> float:
-        # Derived from calculate_frequency_per_hour 
+        # Derived from calculate_frequency_per_hour
         # given a frequency, get throughput
         t = frequency * (self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity * cars_per_train)
         return round(t, 4)
@@ -99,7 +98,6 @@ class Fleet:
         time = self.calculate_route_roundtrip_minutes() / self.fleet_size
         return round(time, 3)
 
-
     def calculate_mau_score(self) -> float:
         mau = MultiAttributeUtility(
             daily_passenger_volume=self.maximum_passenger_volume,
@@ -112,22 +110,23 @@ class Fleet:
 
     def to_dict(self) -> dict:
         # fleet
-        d = {k:v for k,v in self.__dict__.items() if k[0] != '_' and k not in ('route', 'vehicle')}
-        
+        d = {k: v for k, v in self.__dict__.items() if k[0] != '_' and k not in ('route', 'vehicle')}
+
         # route
-        route = {k:v for k,v in self.route.__dict__.items() if k[0] != '_'}
+        route = {k: v for k, v in self.route.__dict__.items() if k[0] != '_'}
         d.update(route)
 
         # ev and subsystems
-        ev = {k:v for k,v in self.vehicle.__dict__.items() if k[0] != '_'}
+        ev = {k: v for k, v in self.vehicle.__dict__.items() if k[0] != '_'}
         for subsystem_str, subsystem in self.vehicle.subsystems.items():
-            #ev[subsystem_str] = subsystem.choice.name
-            elements = {f'{subsystem_str}_{k}':v for k,v in subsystem.__dict__.items() if k[0] != '_'}
+            elements = {f'{subsystem_str}_{k}': v for k, v in subsystem.__dict__.items() if k[0] != '_' and k != 'choice'}
+            elements[subsystem_str] = subsystem.choice.name
             ev.update(elements)
+        
+        ev.pop("subsystems")
         d.update(ev)
 
         return d
-        
 
     def __str__(self) -> str:
         s = 'Fleet:\n'
