@@ -38,7 +38,7 @@ class Ev():
         self.power_consumption_Wh_per_km = self._calculate_power_consumption_Wh_per_km()
         self.range_km = self._calculate_range_km()
         self.maximum_sustained_speed_km_per_hour = self._calculate_average_speed_km_per_hour()
-        self.operated_speed = min(32, self.maximum_sustained_speed_km_per_hour)
+        self.operated_speed_km_per_hour = min(32, self.maximum_sustained_speed_km_per_hour)
         self.uptime_hours = self._calculate_uptime_hours()
         self.downtime_hours = self._calculate_downtime_hours()
         self.availability = self._calculate_availability()
