@@ -19,6 +19,13 @@ class Ev():
         self.battery_charger = BatteryCharger(battery_charger_choice)
         self.chasis = Chasis(chasis_choice)
         self.motor_and_inverter = MotorAndInverter(motor_and_inverter_choice)
+        self.subsystems = {
+            'autonomous_system': self.autonomous_system,
+            'battery_pack': self.battery_pack,
+            'battery_charger': self.battery_charger,
+            'chasis': self.chasis,
+            'motor_and_inverter': self.motor_and_inverter
+        }
 
         if not violate_constraints:
             if self.battery_pack.weight_kg > self.chasis.weight_kg/3:

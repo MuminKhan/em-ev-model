@@ -57,6 +57,20 @@ class Fleet:
 
         self.score = self.calculate_mau_score()
 
+
+    def calculate_route_roundtrip_minutes(self) -> float:
+        # t = d/r + waiting
+        distance = self.route.length_km
+        rate = min(self.vehicle.average_speed_km_per_hour, self.operated_speed_km_hour)
+        time = (60*distance/rate) + (round(self._DWELL_TIME_SECONDS/60, 2) * self.route.stops)
+        return round(time, 3)
+    
+    def calculate_ideal_fleet_size(self) -> int:
+        # gives you b
+        fleet = self.peak_passenger_throughput / ((60/self._DESIRED_WAIT_TIME) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
+        fleet = math.ceil(fleet)
+        return fleet if fleet >= 3 else 3
+
     def calculate_maximum_passenger_volume(self):
         # sum of passengers in peak and non-peak hours
         peak_hours = 4
@@ -80,23 +94,11 @@ class Fleet:
         cost_in_millions = cost_in_thousands / 1000
         return round(cost_in_millions, 3)
 
-    def calculate_route_roundtrip_minutes(self) -> float:
-        # t = d/r + waiting
-        distance = self.route.length_km
-        rate = min(self.vehicle.average_speed_km_per_hour, self.operated_speed_km_hour)
-        time = (60*distance/rate) + (round(self._DWELL_TIME_SECONDS/60, 2) * self.route.stops)
-        return round(time, 3)
-
     def calculate_average_waiting_time_minutes(self) -> float:
         # uses peak load...
         time = self.calculate_route_roundtrip_minutes() / self.fleet_size
         return round(time, 3)
 
-    def calculate_ideal_fleet_size(self) -> int:
-        # gives you b
-        fleet = self.peak_passenger_throughput / ((60/self._DESIRED_WAIT_TIME) * self._LOAD_FACTOR_EXPECTED_AVG * self.vehicle.chasis.passenger_capacity)
-        fleet = math.ceil(fleet)
-        return fleet if fleet >= 3 else 3
 
     def calculate_mau_score(self) -> float:
         mau = MultiAttributeUtility(
@@ -109,18 +111,21 @@ class Fleet:
         return score
 
     def to_dict(self) -> dict:
+        # fleet
         d = {k:v for k,v in self.__dict__.items() if k[0] != '_' and k not in ('route', 'vehicle')}
-        ev = {k:v for k,v in self.vehicle.__dict__.items() if k[0] != '_'}
-        ev['autonomous_system'] = self.vehicle.autonomous_system.choice.name
-        ev['battery_charger'] = self.vehicle.battery_charger.choice.name
-        ev['battery_pack'] = self.vehicle.battery_pack.choice.name
-        ev['chasis'] = self.vehicle.chasis.choice.name
-        ev['motor_and_inverter'] = self.vehicle.motor_and_inverter.choice.name
         
+        # route
         route = {k:v for k,v in self.route.__dict__.items() if k[0] != '_'}
-
-        d.update(ev)
         d.update(route)
+
+        # ev and subsystems
+        ev = {k:v for k,v in self.vehicle.__dict__.items() if k[0] != '_'}
+        for subsystem_str, subsystem in self.vehicle.subsystems.items():
+            #ev[subsystem_str] = subsystem.choice.name
+            elements = {f'{subsystem_str}_{k}':v for k,v in subsystem.__dict__.items() if k[0] != '_'}
+            ev.update(elements)
+        d.update(ev)
+
         return d
         
 
