@@ -35,9 +35,7 @@ class Fleet:
         self.route = route
         self.vehicle = ev
 
-        self.frequency_peak = self.calculate_frequency_per_hour(self.peak_hourly_passenger_throughput)
-
-        self.maximum_passenger_volume = self.calculate_maximum_passenger_volume()
+        self.peak_throughput_target = peak_throughput_target
         self.route_completion_time_per_vehicle_minutes = self.calculate_route_roundtrip_minutes()
 
         self.fleet_size = self.optimize_ideal_fleet_size()
@@ -45,6 +43,8 @@ class Fleet:
 
         self.average_wait_time_minutes = self.calculate_average_waiting_time_minutes()
         self.peak_hourly_passenger_throughput = self.calculate_throughput(self.fleet_size)
+        self.maximum_passenger_volume = self.calculate_maximum_passenger_volume()
+        self.frequency_peak = self.calculate_frequency_per_hour(self.peak_hourly_passenger_throughput)
 
         self.score = self.calculate_mau_score()
 
@@ -74,10 +74,9 @@ class Fleet:
     def optimize_ideal_fleet_size(self) -> int:
         fleet_size = 0
         calculated_throughput = 0
-        while calculated_throughput < self.peak_hourly_passenger_throughput:
+        while calculated_throughput < self.peak_throughput_target:
             fleet_size += 1
-            self.calculate_throughput(fleet_size)
-
+            calculated_throughput = self.calculate_throughput(fleet_size)
         return fleet_size + self._FLEET_BUFFER_VEHICLES
 
     def calculate_total_fleet_cost_usd(self) -> float:
