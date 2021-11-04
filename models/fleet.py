@@ -57,7 +57,7 @@ class Fleet:
     def calculate_route_roundtrip_minutes(self) -> float:
         # t = d/r + waiting
         distance = self.route.length_km
-        rate = self.vehicle.operated_speed
+        rate = self.vehicle.operated_speed_km_hour
         time = (60*distance/rate) + (round(self._DWELL_TIME_SECONDS/60, 2) * self.route.stops)
         return round(time, 3)
 
