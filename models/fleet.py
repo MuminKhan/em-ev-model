@@ -39,7 +39,7 @@ class Fleet:
         self.route_completion_time_per_vehicle_minutes = self.calculate_route_roundtrip_minutes()
 
         self.fleet_size = self.optimize_ideal_fleet_size()
-        self.fleet_cost_1M_usd = self.calculate_total_fleet_cost_usd()
+        self.fleet_cost_1k_usd = self.calculate_total_fleet_cost_usd()
 
         self.average_wait_time_minutes = self.calculate_average_waiting_time_minutes()
         self.peak_hourly_passenger_throughput = self.calculate_throughput(self.fleet_size)
@@ -81,8 +81,7 @@ class Fleet:
 
     def calculate_total_fleet_cost_usd(self) -> float:
         cost_in_thousands = self.vehicle.total_vehicle_cost_1k_usd * self.fleet_size
-        cost_in_millions = cost_in_thousands / 1000
-        return round(cost_in_millions, 3)
+        return cost_in_thousands
 
     def calculate_average_waiting_time_minutes(self) -> float:
         # uses peak load...
