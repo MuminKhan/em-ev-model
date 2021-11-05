@@ -7,15 +7,12 @@ from models.route import Route
 
 class Fleet:
 
-    def __init__(self, route: Route, ev: Ev, peak_throughput_target: int = 150) -> None:
-        """
-        In addition to the model documentation, create a table that describes 5 unique architecture instances (of your choice) that includes this information used and/or produced by your model:
-        •	Fleet size (number of vehicles).
-        •	Vehicle specifications (the design variables—from Appendix C—used in the specific architecture instance).
-        •	Intermediate performance variables for each architecture instance:
-            o	Vehicle speed and range; fleet throughput, average wait time, and availability.
-        •	Vehicle and fleet cost.
-        """
+    def __init__(self, route: Route, ev: Ev, fleet_size: int = None, peak_throughput_target: int = None) -> None:
+
+        # Parameter validation
+        if fleet_size is None and peak_throughput_target is None:
+            raise AttributeError("Please either specify a fleet_size value or peak_throughput_target")
+
         # CONSTANTS
         # Average passenger weight [kg] = 100
         self._PASSENGER_WEIGHT_AVERAGE_KG = 100
@@ -38,7 +35,7 @@ class Fleet:
         self.peak_throughput_target = peak_throughput_target
         self.route_completion_time_per_vehicle_minutes = self.calculate_route_roundtrip_minutes()
 
-        self.fleet_size = self.optimize_ideal_fleet_size()
+        self.fleet_size = fleet_size if fleet_size is not None else self.optimize_ideal_fleet_size()
         self.fleet_cost_1k_usd = self.calculate_total_fleet_cost_usd()
 
         self.average_wait_time_minutes = self.calculate_average_waiting_time_minutes()
