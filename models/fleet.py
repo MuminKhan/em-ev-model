@@ -60,7 +60,7 @@ class Fleet:
 
     def calculate_maximum_passenger_volume(self):
         # sum of passengers in peak and non-peak hours
-        return self.peak_hourly_passenger_throughput * 24
+        return self.peak_hourly_passenger_throughput * 24 * self.vehicle.availability
 
     def calculate_throughput(self, fleet_size) -> int:
         pass_per_stop = math.floor(self.vehicle.chasis.passenger_capacity * self._LOAD_FACTOR_EXPECTED_AVG * fleet_size)
