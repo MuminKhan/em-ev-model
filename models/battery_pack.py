@@ -2,6 +2,29 @@ from enum import Enum, auto
 
 
 class BatteryPackChoice(Enum):
+    """
+    :class:`BatteryPackChoice` to be used with :class:`BatteryPack`
+    Source: OS4 Appendix A 
+
+    +-----------+---------------+---------------+-------------------------+ 
+    | Choice    | Weight        | Cost (USD)    | Capacity (kWh)          |
+    +===========+===============+===============+=========================+
+    | P1        | 512 kg        | $8,000        | 40 kWh                  |
+    +-----------|---------------+---------------|-------------------------+
+    | P2        | 420 kg        | $16,000       | 60 kWh                  |
+    +-----------|---------------+---------------|-------------------------+
+    | P3        | 825 kg        | $16,000       | 75 kWh                  |
+    +-----------|---------------+---------------|-------------------------+
+    | P4        | 800 kg        | $25,000       | 100 kWh                 |
+    +-----------|---------------+---------------|-------------------------+
+    | P5        | 1500 kg       | $25,000       | 125 kWh                 |
+    +-----------|---------------+---------------|-------------------------+
+    | P6        | 1680 kg       | $62,000       | 240 kWh                 |
+    +-----------|---------------+---------------|-------------------------+
+    | P7        | 2880 kg       | $48,000       | 240 kWh                 |
+    +-----------|---------------+---------------|-------------------------+    
+    """
+
     P1 = auto()
     P2 = auto()
     P3 = auto()
@@ -12,8 +35,14 @@ class BatteryPackChoice(Enum):
 
 
 class BatteryPack:
+    """
+    :class:`BatteryPack` represents an instance of a battery Pack. To be used in the construction of :class:`Ev`
+    """
 
     def __init__(self, battery_pack_choice: BatteryPackChoice) -> None:
+                
+        if type(battery_pack_choice) is not BatteryPackChoice:
+            raise ValueError(f'battery_pack_choice argument must be of type BatteryPackChoice rather than supplied {type(battery_pack_choice)}')
 
         self._key_capacity_kWh = "capacity_kWh"
         self._key_cost_1k_usd = "cost_1k_usd"

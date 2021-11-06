@@ -6,6 +6,9 @@ from models.motor_and_inverter import MotorAndInverter, MotorAndInverterChoice
 
 
 class Ev():
+    """
+    :class:`Ev` represents a single configuration of an EV to be used with :class:`fleet`
+    """
 
     def __init__(self, autonomous_system_choice: AutonomousSystemChoice = None, battery_charger_choice: BatteryChargerChoice = None, battery_pack_choice: BatteryPackChoice = None,  chasis_choice: ChasisChoice = None, motor_and_inverter_choice: MotorAndInverterChoice = None, violate_constraints=False) -> None:
 

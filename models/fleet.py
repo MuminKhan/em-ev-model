@@ -6,12 +6,33 @@ from models.route import Route
 
 
 class Fleet:
+    """
+    :class:`Fleet` represents an n number of vehicle fleet of :class:`Ev` and its derived properties. 
+    """
 
     def __init__(self, route: Route, ev: Ev, fleet_size: int = None, peak_throughput_target: int = None) -> None:
+        """
+        Creates the :class:`Fleet` class. 
+
+        :param route: :class:`Route` of route information
+        :type route: :class:`Route`
+        :param ev: :class:`Ev` object that fleet should be comprised of
+        :type ev: :class:`Ev`
+        :param fleet_size: Size of fleet
+        :type fleet_size: int
+        
+        
+        """
 
         # Parameter validation
+        if type(route) is not Route:
+            raise ValueError(f'route argument must be of type route rather than supplied {type(route)}')
+        if type(ev) is not Ev:
+            raise ValueError(f'ev argument must be of type Ev rather than supplied {type(ev)}')
         if fleet_size is None and peak_throughput_target is None:
             raise AttributeError("Please either specify a fleet_size value or peak_throughput_target")
+        if fleet_size is not None and type(fleet_size) is not int:
+            raise AttributeError(f"fleet_size must be of type int.")
 
         # CONSTANTS
         # Average passenger weight [kg] = 100

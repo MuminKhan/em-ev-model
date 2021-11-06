@@ -2,22 +2,43 @@ from enum import Enum, auto
 
 
 class BatteryChargerChoice(Enum):
+    """
+    :class:`BatteryChargerChoice` to be used with :class:`BatteryCharger` 
+    Source: OS4 Appendix A 
+
+    +--------+--------+------------+------------+ 
+    | Choice | Weight | Cost (USD) | Power (kW) |
+    +========+========+============+============+
+    | G1     | 1.0 kg | $1,000     | 10 kW      |
+    +--------|--------+------------|------------+
+    | G2     | 1.8 kg | $2,500     | 20 kW      |
+    +--------|--------+------------|------------+
+    | G3     | 5.0 kg | $10,000    | 60 kW      |
+    +--------|--------+------------|------------+    
+    """
+
     G1 = auto()
     G2 = auto()
     G3 = auto()
 
 
 class BatteryCharger:
+    """
+    :class:`BatteryCharger` represents an instance of a battery charger. To be used in the construction of :class:`Ev`
+    """
 
-    def __init__(self, battery_choice: BatteryChargerChoice) -> None:
+    def __init__(self, battery_charger_choice: BatteryChargerChoice) -> None:
+        
+        if type(battery_charger_choice) is not BatteryChargerChoice:
+            raise ValueError(f'battery_charger_choice argument must be of type BatteryChargerChoice rather than supplied {type(battery_charger_choice)}')
 
         self._key_power_kW = "power_kW"
         self._key_cost_1k_usd = "cost_1k_usd"
         self._key_weight_kg = "weight_kg"
 
-        attribute_dict = self._get_attribute_mapping(battery_choice)
+        attribute_dict = self._get_attribute_mapping(battery_charger_choice)
 
-        self.choice = battery_choice
+        self.choice = battery_charger_choice
         self.power_kW = attribute_dict.get(self._key_power_kW, -1)
         self.cost_1k_usd = attribute_dict.get(self._key_cost_1k_usd, -1)
         self.weight_kg = attribute_dict.get(self._key_weight_kg, -1)

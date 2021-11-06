@@ -2,6 +2,23 @@ from enum import Enum, auto
 
 
 class MotorAndInverterChoice(Enum):
+    """
+    :class:`MotorAndInverterChoice` to be used with :class:`MotorAndInverter` 
+    Source: OS4 Appendix A 
+
+    +--------+--------+------------+------------+ 
+    | Choice | Weight | Cost (USD) | Power (kW) |
+    +========+========+============+============+
+    | M1     | 82 kg  | $1,200     | 150 kW     |
+    +--------|--------+------------|------------+
+    | M2     | 60 kg  | $1,400     | 150 kW     |
+    +--------|--------+------------|------------+
+    | M3     | 140 kg | $1,650     | 210 kW     |
+    +--------|--------+------------|------------+
+    | M4     | 100 kg | $3,600     | 450 kW     |
+    +--------|--------+------------|------------+    
+    """
+
     M1 = auto()
     M2 = auto()
     M3 = auto()
@@ -9,8 +26,14 @@ class MotorAndInverterChoice(Enum):
 
 
 class MotorAndInverter:
+    """
+    :class:`MotorAndInverter` represents an instance of a motor and inverter. To be used in the construction of :class:`Ev`
+    """
 
     def __init__(self, motor_and_inverter: MotorAndInverterChoice) -> None:
+
+        if type(motor_and_inverter) is not MotorAndInverterChoice:
+            raise ValueError(f'motor_and_inverter argument must be of type MotorAndInverterChoice rather than supplied {type(motor_and_inverter)}')
 
         self._key_weight_kg = "weight_kg"
         self._key_power_kW = "power_kW"
