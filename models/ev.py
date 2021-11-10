@@ -19,7 +19,7 @@ class Ev():
         # SUBSYSTEMS
         self.autonomous_system: AutonomousSystem = AutonomousSystem(autonomous_system_choice)
         self.battery_pack: BatteryPack = BatteryPack(battery_pack_choice)
-        self.battery_charger: BatteryPack = BatteryPack(battery_charger_choice)
+        self.battery_charger: BatteryCharger = BatteryCharger(battery_charger_choice)
         self.chasis: Chasis = Chasis(chasis_choice)
         self.motor_and_inverter: MotorAndInverter = MotorAndInverter(motor_and_inverter_choice)
         self.subsystems = {
