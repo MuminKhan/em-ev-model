@@ -1,10 +1,6 @@
-import pytest
-import sys
-
-print(sys.path)
-
 from models.multi_attribute_utility import MultiAttributeUtility
 
+import pytest
 
 
 @pytest.fixture

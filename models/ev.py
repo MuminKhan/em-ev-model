@@ -7,7 +7,7 @@ from models.motor_and_inverter import MotorAndInverter, MotorAndInverterChoice
 
 class Ev():
     """
-    :class:`Ev` represents a single configuration of an EV to be used with :class:`fleet`
+    :class:`Ev` represents a single configuration of an EV to be used with :class:`Fleet`
     """
 
     def __init__(self, autonomous_system_choice: AutonomousSystemChoice = None, battery_charger_choice: BatteryChargerChoice = None, battery_pack_choice: BatteryPackChoice = None,  chasis_choice: ChasisChoice = None, motor_and_inverter_choice: MotorAndInverterChoice = None, violate_constraints=False) -> None:
@@ -16,7 +16,7 @@ class Ev():
         if any(choices) is None:
             raise ValueError("Must supply choices for each: autonomous_system_choice, battery_pack_choice, battery_charger_choice, chasis_choice, motor_and_inverter_choice")
 
-        # Subsystems
+        # SUBSYSTEMS
         self.autonomous_system = AutonomousSystem(autonomous_system_choice)
         self.battery_pack = BatteryPack(battery_pack_choice)
         self.battery_charger = BatteryCharger(battery_charger_choice)
@@ -30,18 +30,26 @@ class Ev():
             'motor_and_inverter': self.motor_and_inverter
         }
 
+        # CONSTANTS
+        self.MAX_SPEED_KMH = 32
+
+        # CONSTRAINTS
         if not violate_constraints:
+            # rules to check to keep constraints
             if self.battery_pack.weight_kg > self.chasis.weight_kg/3:
                 raise ValueError("The battery pack weight shall be no greater than ⅓ of the chassis weight (this is a proxy for limited space availability).")
+        else:
+            # rules to set if we're violating constraints
+            self.MAX_SPEED_KMH = 999
 
-        # Derived Attributes
+        # DERIVED ATTRIBUTES
         self.total_vehicle_cost_1k_usd = self._calculate_total_vehicle_cost_1k_usd()
         self.total_vehicle_weight_kg = self._calculate_total_vehicle_weight_kg()
         self.battery_charge_time_hours = self._calculate_battery_charge_time_hours()
         self.power_consumption_Wh_per_km = self._calculate_power_consumption_Wh_per_km()
         self.range_km = self._calculate_range_km()
         self.maximum_sustained_speed_km_per_hour = self._calculate_average_speed_km_per_hour()
-        self.operated_speed_km_hour = min(32, self.maximum_sustained_speed_km_per_hour)
+        self.operated_speed_km_hour = min(self.MAX_SPEED_KMH, self.maximum_sustained_speed_km_per_hour)
         self.uptime_hours = self._calculate_uptime_hours()
         self.downtime_hours = self._calculate_downtime_hours()
         self.availability = self._calculate_availability()
@@ -120,10 +128,17 @@ class Ev():
         return round(availability, 4)
 
     def _calculate_passenger_capacity_to_cost_ratio(self) -> float:
+        """
+        0 < Ratio = capacity / cost
+        """
         ratio = self.chasis.passenger_capacity / self.total_vehicle_cost_1k_usd
         return round(ratio, 4)
 
     def __str__(self) -> str:
+        """
+        String representation of the :class:`Ev` class.
+        """
+
         s = " EV ".center(50, '*')
 
         # Autonomous System

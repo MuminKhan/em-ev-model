@@ -1,9 +1,8 @@
-from decimal import Decimal
 
 
 class MultiAttributeUtility:
     """
-    MultiAttributeUtility Class
+    :class:`MultiAttributeUtility` class will calculate the weighted sum of an :class:`Ev` configuration. 
     """
 
     def __init__(self, daily_passenger_volume, peak_passenger_throuput, average_wait_time_minutes, availability, name='', explain=False) -> None:
@@ -91,7 +90,7 @@ class MultiAttributeUtility:
             20: 0.20,
             30: 0.0
         }
-        
+
         utility = self.interpolate(average_wait_time_minutes, util_map)
         if self._explain:
             print(f'average_wait_time_minutes value of {average_wait_time_minutes} is {utility} utility')

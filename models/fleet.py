@@ -20,11 +20,9 @@ class Fleet:
         :type ev: :class:`Ev`
         :param fleet_size: Size of fleet
         :type fleet_size: int
-        
-        
         """
 
-        # Parameter validation
+        # PARAMETER VALIDATION
         if type(route) is not Route:
             raise ValueError(f'route argument must be of type route rather than supplied {type(route)}')
         if type(ev) is not Ev:
@@ -47,9 +45,10 @@ class Fleet:
         # Dwell time [s] = 60 (time for passengers get out and get in)
         self._DWELL_TIME_SECONDS = 60
 
+        # Optional number of fleet buffer
         self._FLEET_BUFFER_VEHICLES = 0
 
-        # Derived Parameters
+        # DERIVED PARAMETERS
         self.route = route
         self.vehicle = ev
 
