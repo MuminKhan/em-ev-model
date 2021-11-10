@@ -43,10 +43,10 @@ class AutonomousSystem:
 
         attribute_dict = self._get_attribute_mapping(autonomous_system)
 
-        self.choice = autonomous_system
-        self.weight_kg = attribute_dict.get(self._key_weight_kg, -1)
-        self.added_power_consumption_Wh_per_kW = attribute_dict.get(self._key_added_power_consumption_Wh_per_kW, -1)
-        self.cost_1k_usd = attribute_dict.get(self._key_cost_1k_usd, -1)
+        self.choice: AutonomousSystemChoice = autonomous_system
+        self.weight_kg: float = attribute_dict.get(self._key_weight_kg, -1)
+        self.added_power_consumption_Wh_per_kW: float = attribute_dict.get(self._key_added_power_consumption_Wh_per_kW, -1)
+        self.cost_1k_usd: float =  attribute_dict.get(self._key_cost_1k_usd, -1)
 
     def _get_attribute_mapping(self, autonomous_system: AutonomousSystemChoice) -> dict:
 

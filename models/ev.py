@@ -17,11 +17,11 @@ class Ev():
             raise ValueError("Must supply choices for each: autonomous_system_choice, battery_pack_choice, battery_charger_choice, chasis_choice, motor_and_inverter_choice")
 
         # SUBSYSTEMS
-        self.autonomous_system = AutonomousSystem(autonomous_system_choice)
-        self.battery_pack = BatteryPack(battery_pack_choice)
-        self.battery_charger = BatteryCharger(battery_charger_choice)
-        self.chasis = Chasis(chasis_choice)
-        self.motor_and_inverter = MotorAndInverter(motor_and_inverter_choice)
+        self.autonomous_system: AutonomousSystem = AutonomousSystem(autonomous_system_choice)
+        self.battery_pack: BatteryPack = BatteryPack(battery_pack_choice)
+        self.battery_charger: BatteryPack = BatteryPack(battery_charger_choice)
+        self.chasis: Chasis = Chasis(chasis_choice)
+        self.motor_and_inverter: MotorAndInverter = MotorAndInverter(motor_and_inverter_choice)
         self.subsystems = {
             'autonomous_system': self.autonomous_system,
             'battery_pack': self.battery_pack,
@@ -43,17 +43,17 @@ class Ev():
             self.MAX_SPEED_KMH = 999
 
         # DERIVED ATTRIBUTES
-        self.total_vehicle_cost_1k_usd = self._calculate_total_vehicle_cost_1k_usd()
-        self.total_vehicle_weight_kg = self._calculate_total_vehicle_weight_kg()
-        self.battery_charge_time_hours = self._calculate_battery_charge_time_hours()
-        self.power_consumption_Wh_per_km = self._calculate_power_consumption_Wh_per_km()
-        self.range_km = self._calculate_range_km()
-        self.maximum_sustained_speed_km_per_hour = self._calculate_average_speed_km_per_hour()
-        self.operated_speed_km_hour = min(self.MAX_SPEED_KMH, self.maximum_sustained_speed_km_per_hour)
-        self.uptime_hours = self._calculate_uptime_hours()
-        self.downtime_hours = self._calculate_downtime_hours()
-        self.availability = self._calculate_availability()
-        self.passenger_capacity_to_cost_ratio = self._calculate_passenger_capacity_to_cost_ratio()
+        self.total_vehicle_cost_1k_usd: float = self._calculate_total_vehicle_cost_1k_usd()
+        self.total_vehicle_weight_kg: float = self._calculate_total_vehicle_weight_kg()
+        self.battery_charge_time_hours: float = self._calculate_battery_charge_time_hours()
+        self.power_consumption_Wh_per_km: float = self._calculate_power_consumption_Wh_per_km()
+        self.range_km: float = self._calculate_range_km()
+        self.maximum_sustained_speed_km_per_hour: float = self._calculate_average_speed_km_per_hour()
+        self.operated_speed_km_hour: float = min(self.MAX_SPEED_KMH, self.maximum_sustained_speed_km_per_hour)
+        self.uptime_hours: float = self._calculate_uptime_hours()
+        self.downtime_hours: float = self._calculate_downtime_hours()
+        self.availability: float = self._calculate_availability()
+        self.passenger_capacity_to_cost_ratio: float = self._calculate_passenger_capacity_to_cost_ratio()
 
     def _calculate_total_vehicle_cost_1k_usd(self):
         total_cost = 0.0

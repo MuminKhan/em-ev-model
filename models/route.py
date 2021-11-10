@@ -6,8 +6,8 @@ class Route:
     """
 
     def __init__(self, length_km: float, number_stops: int) -> None:
-        self.length_km = length_km
-        self.stops = number_stops
+        self.length_km: float = length_km
+        self.stops: int = number_stops
 
     def __str__(self) -> str:
         s = '\n'

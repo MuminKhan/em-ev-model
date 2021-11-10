@@ -41,10 +41,10 @@ class MotorAndInverter:
 
         attribute_dict = self._get_attribute_mapping(motor_and_inverter)
 
-        self.choice = motor_and_inverter
-        self.weight_kg = attribute_dict.get(self._key_weight_kg, -1)
-        self.power_kW = attribute_dict.get(self._key_power_kW, -1)
-        self.cost_1k_usd = attribute_dict.get(self._key_cost_1k_usd, -1)
+        self.choice: MotorAndInverterChoice = motor_and_inverter
+        self.weight_kg: float = attribute_dict.get(self._key_weight_kg, -1)
+        self.power_kW: float = attribute_dict.get(self._key_power_kW, -1)
+        self.cost_1k_usd: float = attribute_dict.get(self._key_cost_1k_usd, -1)
 
     def _get_attribute_mapping(self, motor_and_inverter: MotorAndInverterChoice) -> dict:
 

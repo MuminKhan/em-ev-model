@@ -49,21 +49,21 @@ class Fleet:
         self._FLEET_BUFFER_VEHICLES = 0
 
         # DERIVED PARAMETERS
-        self.route = route
-        self.vehicle = ev
+        self.route: Route = route
+        self.vehicle: Ev = ev
 
-        self.peak_throughput_target = peak_throughput_target
-        self.route_completion_time_per_vehicle_minutes = self.calculate_route_roundtrip_minutes()
+        self.peak_throughput_target: int = peak_throughput_target
+        self.route_completion_time_per_vehicle_minutes: float = self.calculate_route_roundtrip_minutes()
 
-        self.fleet_size = fleet_size if fleet_size is not None else self.optimize_ideal_fleet_size()
-        self.fleet_cost_1k_usd = self.calculate_total_fleet_cost_usd()
+        self.fleet_size: int = fleet_size if fleet_size is not None else self.optimize_ideal_fleet_size()
+        self.fleet_cost_1k_usd: float = self.calculate_total_fleet_cost_usd()
 
-        self.average_wait_time_minutes = self.calculate_average_waiting_time_minutes()
-        self.peak_hourly_passenger_throughput = self.calculate_throughput(self.fleet_size)
-        self.maximum_passenger_volume = self.calculate_maximum_passenger_volume()
-        self.frequency_peak = self.calculate_frequency_per_hour(self.peak_hourly_passenger_throughput)
+        self.average_wait_time_minutes: float = self.calculate_average_waiting_time_minutes()
+        self.peak_hourly_passenger_throughput: int = self.calculate_throughput(self.fleet_size)
+        self.maximum_passenger_volume: int = self.calculate_maximum_passenger_volume()
+        self.frequency_peak: float = self.calculate_frequency_per_hour(self.peak_hourly_passenger_throughput)
 
-        self.score = self.calculate_mau_score()
+        self.score: float = self.calculate_mau_score()
 
     def calculate_frequency_per_hour(self, throughput: int, cars_per_train=1) -> float:
         # OS4 Appendix B. Thanks Wikipedia

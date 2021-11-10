@@ -24,13 +24,13 @@ class MultiAttributeUtility:
         if availability < 0:
             raise ValueError(f"availability must be greater than 0, not {availability}")
 
-        self.name = name
-        self._explain = explain
-        self.daily_passenger_volume = daily_passenger_volume
-        self.peak_passenger_throuput = peak_passenger_throuput
-        self.average_wait_time_minutes = average_wait_time_minutes
-        self.availability = availability
-        self.score = self._calculate_weighted_sum_mau()
+        self.name: str = name
+        self._explain: bool = explain
+        self.daily_passenger_volume: int = daily_passenger_volume
+        self.peak_passenger_throuput: int = peak_passenger_throuput
+        self.average_wait_time_minutes: float = average_wait_time_minutes
+        self.availability: float = availability
+        self.score: float = self._calculate_weighted_sum_mau()
 
     def interpolate(self, x: float, util_map: dict) -> float:
         p1 = p2 = list(util_map.items())[0]

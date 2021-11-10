@@ -50,10 +50,10 @@ class BatteryPack:
 
         attribute_dict = self._get_attribute_mapping(battery_pack_choice)
 
-        self.choice = battery_pack_choice
-        self.capacity_kWh = attribute_dict.get(self._key_capacity_kWh, -1)
-        self.cost_1k_usd = attribute_dict.get(self._key_cost_1k_usd, -1)
-        self.weight_kg = attribute_dict.get(self._key_weight_kg, -1)
+        self.choice: BatteryPackChoice = battery_pack_choice
+        self.capacity_kWh: float = attribute_dict.get(self._key_capacity_kWh, -1)
+        self.cost_1k_usd: float = attribute_dict.get(self._key_cost_1k_usd, -1)
+        self.weight_kg: float = attribute_dict.get(self._key_weight_kg, -1)
 
     def _get_attribute_mapping(self, battery_pack_choice: BatteryPackChoice) -> dict:
 
